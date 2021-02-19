@@ -1,5 +1,14 @@
-import { AddAction, DeleteAction, TODO_ACTIONS, UpdateAction } from './actionTypes';
-import { Task } from './reducer';
+import {
+    AddAction,
+    DeleteAction,
+    FetchAction,
+    FetchSuccessAction,
+    FetchFailureAction,
+    TodoResponse,
+    TODO_ACTIONS,
+    CompleteAction,
+    EditAction,
+} from './actionTypes';
 
 export const addTask = (params: string): AddAction => {
     return {
@@ -8,16 +17,42 @@ export const addTask = (params: string): AddAction => {
     };
 };
 
-export const updateTask = (params: Task): UpdateAction => {
+export const completeTask = (id: number): CompleteAction => {
     return {
-        type: TODO_ACTIONS.UPDATE_TASK,
+        type: TODO_ACTIONS.COMPLETE_TASK,
+        payload: id,
+    };
+};
+
+export const editTask = (params: { taskId: number; newTitle: string }): EditAction => {
+    return {
+        type: TODO_ACTIONS.EDIT_TASK,
         payload: params,
     };
 };
 
-export const deleteTask = (params: Task): DeleteAction => {
+export const deleteTask = (id: number): DeleteAction => {
     return {
         type: TODO_ACTIONS.DELETE_TASK,
-        payload: params,
+        payload: id,
+    };
+};
+
+export const fetch = (): FetchAction => {
+    return {
+        type: TODO_ACTIONS.FETCH_TODO,
+    };
+};
+
+export const fetchSuccess = (payload: TodoResponse): FetchSuccessAction => {
+    return {
+        type: TODO_ACTIONS.FETCH_TODO_SUCCESS,
+        payload,
+    };
+};
+
+export const fetchFailure = (): FetchFailureAction => {
+    return {
+        type: TODO_ACTIONS.FETCH_TODO_FAILURE,
     };
 };

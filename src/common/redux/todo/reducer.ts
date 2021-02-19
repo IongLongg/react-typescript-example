@@ -16,10 +16,12 @@ const initialState: TodoState = {
 
 const reducer = (state = initialState, action: any): TodoState => {
     let taskId: number;
+    let newList: Task[];
+
     switch (action.type) {
         case TODO_ACTIONS.ADD_TASK:
             const newTask = {
-                id: state.list.length ? state.list[state.list.length - 1].id + 1 : 1,
+                id: new Date().getTime(),
                 title: action.payload,
                 isCompleted: false,
             };
@@ -27,21 +29,27 @@ const reducer = (state = initialState, action: any): TodoState => {
                 ...state,
                 list: [...state.list, newTask],
             };
-        case TODO_ACTIONS.UPDATE_TASK:
-            taskId = state.list.indexOf(action.payload);
-            const updatedTask = {
-                ...action.payload,
-                isCompleted: !action.payload.isCompleted,
-            };
+        case TODO_ACTIONS.COMPLETE_TASK:
+            taskId = state.list.findIndex((item) => item.id === action.payload);
+            newList = [...state.list];
+            newList[taskId].isCompleted = !newList[taskId].isCompleted;
             return {
                 ...state,
-                list: [...state.list.slice(0, taskId), updatedTask, ...state.list.slice(taskId + 1)],
+                list: [...newList],
+            };
+        case TODO_ACTIONS.EDIT_TASK:
+            newList = [...state.list];
+            taskId = state.list.findIndex((item) => item.id === action.payload.taskId);
+            newList[taskId].title = action.payload.newTitle;
+            return {
+                ...state,
+                list: [...newList],
             };
         case TODO_ACTIONS.DELETE_TASK:
-            taskId = state.list.indexOf(action.payload);
+            newList = state.list.filter((item) => item.id !== action.payload);
             return {
                 ...state,
-                list: [...state.list.slice(0, taskId), ...state.list.slice(taskId + 1)],
+                list: [...newList],
             };
         default:
             return state;

@@ -22,7 +22,9 @@ const Home: React.FunctionComponent = (): React.ReactElement => {
         history.push('/login');
     };
 
-    const formAddTaskSchema = Yup.string().required('This field is required').min(3, 'Too short').max(250, 'Too long');
+    const formAddTaskSchema = Yup.object().shape({
+        title: Yup.string().required('This field is required').min(3, 'Too short').max(250, 'Too long'),
+    });
 
     const handleAddTask = (values: string) => {
         console.log(values);

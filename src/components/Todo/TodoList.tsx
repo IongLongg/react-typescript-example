@@ -3,7 +3,9 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { Task } from '../../common/redux/todo/reducer';
-import { updateTask, deleteTask } from '../../common/redux/todo/actions';
+import { completeTask, deleteTask } from '../../common/redux/todo/actions';
+
+import TodoItem from './TodoItem';
 
 interface ListProps {
     list: Task[];
@@ -11,29 +13,33 @@ interface ListProps {
 
 const TodoList: React.FunctionComponent<ListProps> = ({ list }): React.ReactElement => {
     const dispatch = useDispatch();
-    const handleUpdateTask = (item: Task) => {
-        console.log(item);
-        dispatch(updateTask(item));
+    const handleUpdateTask = (id: number) => {
+        dispatch(completeTask(id));
     };
 
-    const handleDeleteTask = (item: Task) => {
-        console.log(`Delete ${item}`);
-        dispatch(deleteTask(item));
+    const handleDeleteTask = (id: number) => {
+        console.log(`Delete ${id}`);
+        dispatch(deleteTask(id));
     };
 
     return (
         <ListGroup>
             {list.map((item) => (
                 <ListGroup.Item
-                    className="d-flex justify-content-between"
+                    className="d-flex justify-content-between p-2 text-left"
                     variant={`${item.isCompleted && 'dark'}`}
                     key={item.id}
                 >
-                    <div className="p-2 w-100 text-left" onClick={() => handleUpdateTask(item)}>
-                        {item.isCompleted ? <s>{item.title}</s> : item.title}
+                    <div className="w-100">
+                        <TodoItem item={item} handleUpdateTask={handleUpdateTask} />
                     </div>
+
                     {item.isCompleted && (
-                        <Button className="justify-content-end" variant="light" onClick={() => handleDeleteTask(item)}>
+                        <Button
+                            className="justify-content-end"
+                            variant="light"
+                            onClick={() => handleDeleteTask(item.id)}
+                        >
                             Delete
                         </Button>
                     )}

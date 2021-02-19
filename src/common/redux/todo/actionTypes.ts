@@ -1,13 +1,17 @@
-import { Task } from './reducer';
-
 export const TODO_ACTIONS = {
     ADD_TASK: 'ADD_TASK',
-    UPDATE_TASK: 'UPDATE_TASK',
+    COMPLETE_TASK: 'COMPLETE_TASK',
     DELETE_TASK: 'DELETE_TASK',
+    EDIT_TASK: 'EDIT_TASK',
     FETCH_TODO: 'FETCH_TODO',
     FETCH_TODO_SUCCESS: 'FETCH_TODO_SUCCESS',
     FETCH_TODO_FAILURE: 'FETCH_TODO_FAILURE',
 };
+
+interface EditTaskParams {
+    taskId: number;
+    newTitle: string;
+}
 
 interface TodoResponse {
     data: {
@@ -23,14 +27,19 @@ interface AddAction {
     payload: string;
 }
 
-interface UpdateAction {
-    type: typeof TODO_ACTIONS.UPDATE_TASK;
-    payload: Task;
+interface CompleteAction {
+    type: typeof TODO_ACTIONS.COMPLETE_TASK;
+    payload: number;
+}
+
+interface EditAction {
+    type: typeof TODO_ACTIONS.EDIT_TASK;
+    payload: EditTaskParams;
 }
 
 interface DeleteAction {
     type: typeof TODO_ACTIONS.DELETE_TASK;
-    payload: Task;
+    payload: number;
 }
 
 interface FetchAction {
@@ -48,7 +57,8 @@ interface FetchFailureAction {
 
 export type {
     AddAction,
-    UpdateAction,
+    CompleteAction,
+    EditAction,
     DeleteAction,
     FetchAction,
     FetchSuccessAction,
